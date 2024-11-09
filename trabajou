@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lo Perdido Encontrado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #333;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], input[type="button"], textarea, select, input[type="date"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        input[type="button"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="button"]:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e0f7fa;
+            border-radius: 4px;
+            display: none;
+        }
+        textarea {
+            height: 100px;
+        }
+        .buscar, .encontrar {
+            display: none;
+        }
+        .contacto {
+            display: none;
+        }
+        .image-preview {
+            margin-top: 10px;
+        }
+        .image-preview img {
+            max-width: 100%;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ayúdanos a ayudar</h1>
+
+    <div class="form-container">
+        <label for="accion">Selecciona si estás buscando o encontraste algo:</label>
+        <select id="accion" onchange="mostrarFormulario()">
+            <option value="">Selecciona...</option>
+            <option value="buscar">Buscando algo</option>
+            <option value="encontrar">Encontraste algo</option>
+        </select>
+
+        <div id="buscar" class="buscar">
+            <label for="respuesta">¿Qué estás buscando?</label>
+            <input type="text" id="respuesta" placeholder="Escribe lo que estás buscando">
+
+            <label for="caracteristicas">Características del objeto buscado:</label>
+            <textarea id="caracteristicas" placeholder="Describe lo que estás buscando"></textarea>
+
+            <label for="ubicacion">¿Dónde lo perdiste?</label>
+            <input type="text" id="ubicacion" placeholder="Escribe el lugar donde lo perdiste">
+
+            <label for="fecha">Fecha de cuando lo perdiste:</label>
+            <input type="text" id="fecha" placeholder="Sea específico con la fecha">
+
+            <label for="foto">Sube una foto del objeto perdido (opcional):</label>
+            <input type="file" id="foto" accept="image/*" onchange="mostrarImagen()">
+            <div id="imagePreview" class="image-preview"></div>
+        </div>
+
+        <div id="encontrar" class="encontrar">
+            <label for="respuestaEncontrado">¿Qué encontraste?</label>
+            <input type="text" id="respuestaEncontrado" placeholder="Escribe lo que encontraste">
+
+            <label for="detallesEncontrado">Detalles del objeto encontrado:</label>
+            <textarea id="detallesEncontrado" placeholder="Describe el objeto que encontraste"></textarea>
+
+            <label for="ubicacionEncontrado">¿Dónde lo encontraste?</label>
+            <input type="text" id="ubicacionEncontrado" placeholder="Escribe el lugar donde lo encontraste">
+
+            <label for="fechaEncontrado">Fecha de cuando lo encontraste:</label>
+            <input type="text" id="fechaEncontrado" placeholder="Sea específico con la fecha">
+
+            <label for="fotoEncontrado">Sube una foto del objeto encontrado (opcional):</label>
+            <input type="file" id="fotoEncontrado" accept="image/*" onchange="mostrarImagenEncontrado()">
+            <div id="imagePreviewEncontrado" class="image-preview"></div>
+        </div>
+
+        <div class="contacto">
+            <label for="contacto">¿Cómo se comunicarán contigo?</label>
+            <textarea id="contacto" placeholder="Agrega tu número, correo, Instagram, Facebook, etc."></textarea>
+        </div>
+
+        <input type="button" value="Enviar Respuesta" onclick="mostrarRespuesta()">
+    </div>
+
+    <div class="result" id="resultado">
+        <h2>¡Gracias por responder!</h2>
+        <p id="respuestaMostrada"></p>
+        <p id="caracteristicasMostradas"></p>
+        <p id="ubicacionMostrada"></p>
+        <p id="fechaMostrada"></p>
+        <p id="respuestaEncontradoMostrada"></p>
+        <p id="detallesEncontradoMostrados"></p>
+        <p id="ubicacionEncontradoMostrada"></p>
+        <p id="fechaEncontradoMostrada"></p>
+        <p id="contactoMostrado"></p>
+        <p id="fotoMostrada"></p>
+        <p id="fotoEncontradoMostrada"></p>
+    </div>
+
+    <script>
+        function mostrarFormulario() {
+            var accion = document.getElementById("accion").value;
+            document.getElementById("buscar").style.display = "none";
+            document.getElementById("encontrar").style.display = "none";
+            document.querySelector(".contacto").style.display = "none"; 
+
+            if (accion === "buscar") {
+                document.getElementById("buscar").style.display = "block";
+                document.querySelector(".contacto").style.display = "block"; 
+                document.getElementById("imagePreview").style.display = "block";
+                document.getElementById("imagePreviewEncontrado").style.display = "none";
+            } else if (accion === "encontrar") {
+                document.getElementById("encontrar").style.display = "block";
+                document.querySelector(".contacto").style.display = "block";  
+                document.getElementById("imagePreview").style.display = "none";
+                document.getElementById("imagePreviewEncontrado").style.display = "block";
+            }
+        }
+
+        function mostrarRespuesta() {
+            var accion = document.getElementById("accion").value;
+            var resultado = document.getElementById("resultado");
+            resultado.style.display = "block";
+            
+            if (accion === "buscar") {
+                var respuesta = document.getElementById("respuesta").value;
+                var caracteristicas = document.getElementById("caracteristicas").value;
+                var ubicacion = document.getElementById("ubicacion").value;
+                var fecha = document.getElementById("fecha").value;
+
+                document.getElementById("respuestaMostrada").innerText = "Estás buscando: " + respuesta;
+                document.getElementById("caracteristicasMostradas").innerText = "Características: " + (caracteristicas || "No se proporcionaron características.");
+                document.getElementById("ubicacionMostrada").innerText = "Lugar donde lo perdiste: " + (ubicacion || "No se proporcionó un lugar.");
+                document.getElementById("fechaMostrada").innerText = "Fecha de cuando lo perdiste: " + (fecha || "No se especificó una fecha.");
+            } else if (accion === "encontrar") {
+                var respuestaEncontrado = document.getElementById("respuestaEncontrado").value;
+                var detallesEncontrado = document.getElementById("detallesEncontrado").value;
+                var ubicacionEncontrado = document.getElementById("ubicacionEncontrado").value;
+                var fechaEncontrado = document.getElementById("fechaEncontrado").value;
+
+                document.getElementById("respuestaEncontradoMostrada").innerText = "Encontraste: " + respuestaEncontrado;
+                document.getElementById("detallesEncontradoMostrados").innerText = "Detalles: " + (detallesEncontrado || "No se proporcionaron detalles.");
+                document.getElementById("ubicacionEncontradoMostrada").innerText = "Lugar donde lo encontraste: " + (ubicacionEncontrado || "No se proporcionó un lugar.");
+                document.getElementById("fechaEncontradoMostrada").innerText = "Fecha en que lo encontraste: " + (fechaEncontrado || "No se especificó una fecha.");
+            }
+
+            var contacto = document.getElementById("contacto").value;
+            document.getElementById("contactoMostrado").innerText = "Información de contacto: " + (contacto || "No se proporcionó información de contacto.");
+            
+            var foto = document.getElementById("foto");
+            if (foto.files.length > 0) {
+                var fotoURL = URL.createObjectURL(foto.files[0]);
+                document.getElementById("fotoMostrada").innerHTML = "Foto del objeto perdido: <img src='" + fotoURL + "' />";
+            } else {
+                document.getElementById("fotoMostrada").innerHTML = "";
+            }
+
+            var fotoEncontrado = document.getElementById("fotoEncontrado");
+            if (fotoEncontrado.files.length > 0) {
+                var fotoURLEncontrado = URL.createObjectURL(fotoEncontrado.files[0]);
+                document.getElementById("fotoEncontradoMostrada").innerHTML = "Foto del objeto encontrado: <img src='" + fotoURLEncontrado + "' />";
+            } else {
+                document.getElementById("fotoEncontradoMostrada").innerHTML = "";
+            }
+        }
+
+        function mostrarImagen() {
+            var file = document.getElementById("foto").files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("imagePreview").innerHTML = '<img src="' + e.target.result + '" alt="Imagen subida" />';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function mostrarImagenEncontrado() {
+            var file = document.getElementById("fotoEncontrado").files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("imagePreviewEncontrado").innerHTML = '<img src="' + e.target.result + '" alt="Imagen subida" />';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+</body>
+</html>
